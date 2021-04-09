@@ -1,4 +1,4 @@
-Gramatica1
+Gr1
 S,A,B,C;a,b,z;S
 S->A
 A->a A a

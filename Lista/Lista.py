@@ -16,18 +16,20 @@ class Lista:
             self.ultimo = aux.siguiente = Nodo(nombre,terminales,noTerminales,inicial,producciones)
             self.ultimo.siguiente = self.primero
 
-    def Buscar(self,buscar):
+    def buscar(self,buscar):
         aux = self.primero
 
         if self.vacia():
             print("No hay elementos en la lista")
         else:  
             while aux.siguiente != self.primero:
-                if aux.nombre == buscar:
+                name = ''.join(aux.nombre)
+                if name == buscar:
                     return aux
                 aux = aux.siguiente
 
-            if aux.nombre == buscar:
+            name = ''.join(aux.nombre)
+            if name == buscar:
                     return aux 
 
             return "No Existe" 
@@ -39,9 +41,9 @@ class Lista:
             print("No hay elementos en la lista")
         else:  
             while aux.siguiente != self.primero:
-                print("Nombre: "+str(aux.nombre))
+                print("Nombre: "+''.join(aux.nombre) )
 
                 aux = aux.siguiente
 
-            print("Nombre: "+str(aux.nombre))   
+            print("Nombre: "+''.join(aux.nombre))   
         
