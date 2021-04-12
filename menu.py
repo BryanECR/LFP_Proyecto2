@@ -1,3 +1,5 @@
+from Lectura import Lectura
+
 def menu():
     while(True):
         opciones = '''
@@ -13,13 +15,20 @@ def menu():
         *****************************************************
         '''
         print(opciones)
-        op = input("Ingrese la opcion que desea")
+        op = int(input("\nIngrese la opcion que desea: "))
         if op == 1:
-            print("opcion 1")
+            Lectura.infoFile()
+
         elif op == 2:
-            print("opcion 2")
+            Lectura.imprimir()
+            name = input("\nIngrese el nombre de la gramatica que desea visualizar: ")
+            Lectura.imprimirInfo(name)
+
         elif op == 3:
-            print("opcion 3")
+            Lectura.imprimir()
+            name = input("\nIngrese el nombre de la gramatica que desea Graficar: ")
+            Lectura.grafica(name)
+            
         elif op == 4:
             print("opcion 4")
         elif op == 5:
@@ -29,3 +38,6 @@ def menu():
             break
         else:
             print("Opcion no Valida ingrese un numero del 1 al 6")
+
+
+menu()

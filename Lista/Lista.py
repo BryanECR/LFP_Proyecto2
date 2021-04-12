@@ -40,10 +40,14 @@ class Lista:
         if self.vacia():
             print("No hay elementos en la lista")
         else:  
-            while aux.siguiente != self.primero:
-                print("Nombre: "+''.join(aux.nombre) )
+            try:
+                while aux.siguiente != self.primero:
+                    print("Nombre: "+''.join(aux.nombre) )
+                    aux = aux.siguiente
 
-                aux = aux.siguiente
+                print("Nombre: "+''.join(aux.nombre)) 
+            except:
+                print("")
 
-            print("Nombre: "+''.join(aux.nombre))   
+              
         

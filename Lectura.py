@@ -6,19 +6,35 @@ lista = Lista()
 
 class Lectura:
 
+    def analizarGramaticas(cadena):
+        producciones = str(cadena).replace("*","").split("\n")
+        
+        tamañoProducciones = []
+        for i in range(len(producciones)):
+            a = str(producciones[i]).replace(" ","").split("->")
+            if len(a) != 1:
+                tamañoProducciones.append(len(a[1]))
+            
+        aux = 0
+        for i in range(len(tamañoProducciones)):
+            
+            if tamañoProducciones[i] > aux:
+                aux = tamañoProducciones[i]
+                
+        return aux
+        
     def convetTuple(tup):
         cadena = ''.join(tup)
         return cadena
-
 
     def abrirArchivo():
        file_path = filedialog.askopenfilename(initialdir = "", title = "Abrir Archivo", filetypes = (("text files", "*.*"),("all files", "*.*")) )
         
        return file_path
 
-
     def infoFile():
-        file = open('entrada.txt',"r")
+        ruta = Lectura.abrirArchivo()
+        file = open(ruta,"r")
         c = file.readlines()
         file.close()
 
@@ -36,14 +52,18 @@ class Lectura:
             elementos = str(numeroGramaticas[i]).split("\n")
             nombre = elementos[0]
             c = elementos[1].split(";")
-            #print("Nombre: "+str(nombre)+"\nNo Terminales: "+c[0]+"\nTerminales: "+c[1]+"\nTerminal inicial: "+c[2]+"\nProducciones: " )
             contador = 2
             cadena2 = ""
             while( contador < len(elementos) ):
                 cadena2 += "\n"+str(elementos[contador]) 
                 contador +=1
             
-            lista.incertar(nombre,c[1],str(c[0]),str(c[2]),cadena2)
+            gramatica = Lectura.analizarGramaticas(cadena2)
+
+            if gramatica >= 3:
+                lista.incertar(nombre,c[1],str(c[0]),str(c[2]),cadena2)
+
+        print("\n********** Archivo abierto Correctamente **********\n")
     
     #LISTA DE LAS GRAMATICAS GUARDADAS
     def imprimir():
@@ -53,7 +73,7 @@ class Lectura:
     def imprimirInfo(name):
         datos = lista.buscar(name)
 
-        print("Nombre: "+Lectura.convetTuple(datos.nombre)+"\nNo Terminales = {"+Lectura.convetTuple(datos.noTerminales)+"} \nTerminales={"+Lectura.convetTuple(datos.terminales)+"} \nInicial={"+str(datos.inicial)+"} \nProduccion: "+str(datos.producciones))
+        print("Nombre: "+Lectura.convetTuple(datos.nombre)+"\nNo Terminales = {"+Lectura.convetTuple(datos.noTerminales)+"} \nTerminales={"+Lectura.convetTuple(datos.terminales)+"} \nInicial={"+str(datos.inicial)+"} \nProduccion: "+str(datos.producciones).replace(" ","|"))
 
     def reporte(imagen):
         cadena = '''
@@ -100,8 +120,9 @@ class Lectura:
         }
         .imagen{
         align-content: center;
-        width: 50%;
-        margin: 30px;
+        width: 70%;
+        margin-left: 150px;
+        margin-top: 50px;
         padding: 5%;
         background-color: azure;
         }      
@@ -119,7 +140,6 @@ class Lectura:
         file.write(cadena)
         file.close()
         os.system("reporte.html")
-
 
     #GENERAR GRAFICA DE LA GRAMATICA EN GRAPHVIZ Y METERLA EN UN HTML
     def grafica(name):
@@ -149,11 +169,3 @@ class Lectura:
         file.close()
         os.system('dot -Tpng '+str(name)+'.dot -o '+str(name)+'.png')
         Lectura.reporte(str(name)+'.png')
-
-        
-        
-
-
-
-Lectura.infoFile()
-Lectura.grafica("Gr1")
