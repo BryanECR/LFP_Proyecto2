@@ -32,7 +32,12 @@ def menu():
         elif op == 4:
             print("opcion 4")
         elif op == 5:
-            print("opcion 5")
+            print("--------------- Gramaticas Disponibles ---------------")
+            Lectura.imprimir()
+            name = input("\nIngrese el nombre de la gramatica que desea valuar: ")
+            palabra = str(input("Ingrese la palabra que desea valuar: "))
+            Lectura.Tabla(palabra,name)
+
         elif op == 6:
             print("\nHasta la Proxima\n")
             break

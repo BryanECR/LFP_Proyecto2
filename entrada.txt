@@ -5,7 +5,6 @@ A->a A a
 A->B
 B->b B b
 B->C
-C->z C
 C->z
 *
 Gramatica2
