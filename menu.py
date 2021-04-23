@@ -1,4 +1,5 @@
 from Lectura import Lectura
+import time
 
 def menu():
     while(True):
@@ -30,7 +31,12 @@ def menu():
             Lectura.grafica(name)
             
         elif op == 4:
-            print("opcion 4")
+            print("--------------- Gramaticas Disponibles ---------------")
+            Lectura.imprimir()
+            name = input("\nIngrese el nombre de la gramatica que desea valuar: ")
+            palabra = str(input("Ingrese la palabra que desea valuar: "))
+            Lectura.recorrido(palabra,name)
+            
         elif op == 5:
             print("--------------- Gramaticas Disponibles ---------------")
             Lectura.imprimir()
@@ -44,5 +50,15 @@ def menu():
         else:
             print("Opcion no Valida ingrese un numero del 1 al 6")
 
+def cuenta():
+    print("***** Proyecto 2 LFP *****\nNombre: Bryan Eduardo Caal Racanac\nCarnet: 201801155")
+    numero = 5
+    for i in range(numero):
+        print(numero)
+        time.sleep(1)
+        numero-=1
+        if(numero==0):
+            print("¡Bienvenido!")
+            menu()
 
-menu()
+cuenta()

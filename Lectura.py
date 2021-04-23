@@ -141,7 +141,6 @@ class Lectura:
         file.close()
         os.system("reporte.html")
 
-
     def unir(arr):
         cadena = ""
         for i in range(len(arr)):
@@ -199,8 +198,10 @@ class Lectura:
         pila.append('#')
         html+='<tr>\n<th>1</th>\n<th>#</th>\n<th>a</th>\n<th>(p,$,S;q,S)</th>\n</tr>'
         #print(pila)
-        pila.append('S')
-        html+='<tr>\n<th>2</th>\n<th>#S</th>\n<th>a</th>\n<th>(i,$,A;q,A)</th>\n</tr>'
+        ini = informacion[0]["Nombre"]
+        contini = informacion[0]["Cont"]
+        pila.append(str(ini))
+        html+='<tr>\n<th>2</th>\n<th>#'+str(ini)+'</th>\n<th>a</th>\n<th>(i,$,'+contini+';q,'+contini+')</th>\n</tr>'
         #print(pila)
 
         iteracion = 3
@@ -245,6 +246,130 @@ class Lectura:
         file.close()
         os.system('ReporteTabla.html')
 
+    def reporteGrafico(cadena):
+        html='''
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="UTF-8">
+        <style>
+        html{
+        background: #C6FFDD;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+        .imagen{
+        align-content: center;
+        margin-left: 15%;
+        }
+        </style>
+        </head>
+        <body>
+        <h1>Reporte Grafico con Iteraciones</h1>
+        '''
+        html+=cadena
+        html+= "</body>\n</html>"
+
+        file = open("ReporteGrafico.html","w")
+        file.write(html)
+        file.close()
+
+    def graficas(name,pila,entrada,numero):
+        info = lista.buscar(name)
+        inicial = info.inicial
+        terminales = Lectura.convetTuple(info.terminales)
+
+        cadena = 'pi[label="'+pila+'"]\nen[label="'+entrada+'"]\nrankdir=LR;\nnode [shape = doublecircle]; f;\nnode [shape = circle]; \ni -> p [label = "$,$;#"]\np -> q [label="$,$;'+inicial+'"]\nq -> q [label = "'
+
+        #PRODUCCIONES
+        produ = str(info.producciones).replace("*","").replace(" ",",").replace("->",";").strip().split("\n")
+        for i in range(len(produ)):
+            cadena += '$,'+str(produ[i])+'\n'
+
+        #NO TERMINALES
+        tr = list(terminales)
+        for i in range(len(tr)):
+            if str(tr[i]) != ",":
+                cadena += str(tr[i])+","+str(tr[i])+",$\n"
+        
+        cadena+='"]\nq -> f [label = "$,#,$"]'
+
+        file = open(str(name)+str(numero)+".dot","w")
+        file.write("digraph G {\n"+cadena+"\n}")
+        file.close()
+        os.system("dot -Tpng "+str(name)+str(numero)+".dot -o "+str(name)+str(numero)+".png")
+
+        return str(name)+str(numero)+".png"
+
+
+    def recorrido(palabra,name):
+        palabra = list(palabra)
+        gr = lista.buscar(name)
+        produ = str(gr.producciones).strip().replace("*","").split("\n")
+        #print(produ)
+        informacion = []
+        for i in range(len(produ)):
+            l = list(produ[i])
+            if len(l) > 1:
+                info = str(produ[i]).replace(" ","").split("->")
+                i = {"Nombre":info[0],"Cont":info[1]}
+                informacion.append(i)
+
+        imagenes = ""
+        #INGRESAMOS A LA PILA EL CARACTER DE INICIO Y DE VACIO
+        pila = []
+        imagen = Lectura.graficas(name," ",palabra[0],0)
+        imagenes+='<img class="imagen" src="'+imagen+'">'
+
+        pila.append('#')
+        imagen = Lectura.graficas(name,"#",palabra[0],1)
+        imagenes+='<img class="imagen" src="'+imagen+'">'
+        
+        
+        ini = informacion[0]["Nombre"]
+        pila.append(str(ini))
+        imagen = Lectura.graficas(name,"#"+ini,palabra[0],2)
+        imagenes+='<img class="imagen" src="'+imagen+'">'
+
+        iteracion = 3
+        contador = 0
+        while(True):
+            #LA PILA LLEGO AL FINAL
+            if str(pila[-1]) == "#":
+                imagen = Lectura.graficas(name," "," ",iteracion)
+                imagenes+='<img class="imagen" src="'+imagen+'">'
+                pila.pop()
+                print("***** Cadena Aceptada *****")
+                break
+            #LA ULTIMA POSICION EN LA PILA ES IGUAL A LA PRIMERA EN LA PALABRA
+            elif str(pila[-1]) == palabra[0]:
+                pil = str(Lectura.unir(pila))
+                imagen = Lectura.graficas(name,pil,palabra[0],iteracion)
+                imagenes+='<img class="imagen" src="'+imagen+'">'
+
+                iteracion+=1
+                pila.pop()
+                palabra.pop(0)
+
+            #LA ULTIMA POSICION EN PILA ES IGUAL A UN TERMINAL EN LA GRAMATICA
+            elif str(pila[-1]) == informacion[contador]["Nombre"]:
+                pila.pop()
+                pro = list(informacion[contador]["Cont"])
+                for i2 in range(len(pro)):
+                    pila.append(pro[i2])
+                nuevo = Lectura.unir(pro)
+                pil = Lectura.unir(pila)
+                imagen = Lectura.graficas(name,pil,palabra[0],iteracion)
+                imagenes+='<img class="imagen" src="'+imagen+'">'
+
+                iteracion+=1
+                contador+=1
+
+            else:
+                print("error")
+                break
+
+        Lectura.reporteGrafico(imagenes)
 
     #GENERAR GRAFICA DE LA GRAMATICA EN GRAPHVIZ Y METERLA EN UN HTML
     def grafica(name):
