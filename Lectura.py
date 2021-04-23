@@ -273,6 +273,7 @@ class Lectura:
         file = open("ReporteGrafico.html","w")
         file.write(html)
         file.close()
+        os.system("ReporteGrafico.html")
 
     def graficas(name,pila,entrada,numero):
         info = lista.buscar(name)
