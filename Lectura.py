@@ -75,6 +75,7 @@ class Lectura:
 
         print("Nombre: "+Lectura.convetTuple(datos.nombre)+"\nNo Terminales = {"+Lectura.convetTuple(datos.noTerminales)+"} \nTerminales={"+Lectura.convetTuple(datos.terminales)+"} \nInicial={"+str(datos.inicial)+"} \nProduccion: "+str(datos.producciones).replace(" ","|"))
 
+    #REPORTE DE UNA GRAMATICA SOLA
     def reporte(imagen):
         cadena = '''
         <html lang="es">
@@ -147,6 +148,7 @@ class Lectura:
             cadena +=str(arr[i])
         return cadena
 
+    #REPORTE PARA EL RECORRIDO CON TABLA
     def Tabla(palabra,name):
         palabra = list(palabra)
         html = '''
@@ -246,6 +248,7 @@ class Lectura:
         file.close()
         os.system('ReporteTabla.html')
 
+    #REPORTE DE LA GRAMATICA CON ITERACIONES
     def reporteGrafico(cadena):
         html='''
         <!DOCTYPE html>
@@ -275,6 +278,7 @@ class Lectura:
         file.close()
         os.system("ReporteGrafico.html")
 
+    #GENERADOR DE GRAFICAS
     def graficas(name,pila,entrada,numero):
         info = lista.buscar(name)
         inicial = info.inicial
@@ -301,7 +305,6 @@ class Lectura:
         os.system("dot -Tpng "+str(name)+str(numero)+".dot -o "+str(name)+str(numero)+".png")
 
         return str(name)+str(numero)+".png"
-
 
     def recorrido(palabra,name):
         palabra = list(palabra)
